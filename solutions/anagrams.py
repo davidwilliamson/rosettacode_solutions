@@ -31,6 +31,7 @@ number of anagrams.
 #    grouped[key].append(value)
 # https://docs.python.org/3.7/library/collections.html#collections.defaultdict
 from collections import defaultdict
+import os
 
 
 def get_wordlist(file_name):
@@ -50,7 +51,9 @@ def get_wordlist(file_name):
 def main():
     """main"""
     anagrams = defaultdict(list)
-    for word in get_wordlist('input_data/unixdict.txt'):
+    datafile = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), 'input_data', 'unixdict.txt'))
+    for word in get_wordlist(datafile):
         # anagrams = { 'foo': ['foo', 'oof'], 'bar': ['bar'], ... }
         # sorted(word) will group words by anagram; since sorted(str) returns
         # list and lists aren't hashable, convert it to a tuple. Could also
