@@ -1,0 +1,22 @@
+# Editor cruft
+*~
+*.tmp
+.*.swp
+
+# Intelli-J state files
+.idea
+*.iml
+manual.yaml
+
+# VisualStudio code config files
+.vscode
+.env
+
+# nosetests code coverage data file
+.coverage
+
+# OS cruft
+.DS_Store
+
+# ipython state
+__pycache__
