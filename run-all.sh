@@ -5,6 +5,9 @@
 # python files we should not run. Whitespace delimited.
 skips='__init__.py'
 
+failed=''
+fail_count=0
+
 for f in $(find ./solutions -name *.py); do
     script=$(basename $f )
     skip_this_script=''
@@ -20,4 +23,16 @@ for f in $(find ./solutions -name *.py); do
     echo "--------------- ${script} ----------------------"
     cmd="python $f"
     eval $cmd
+    result=$?
+    if [[ "$result" != '0' ]]; then
+        failed="$failed"$'\n'$script
+        fail_count=$(( fail_count + 1 ))
+    fi
 done
+
+if [[ -n "$failed" ]]; then
+    echo $'\n'"=============== Problems ==============="
+    echo "$fail_count scripts failed:${failed}"
+else
+    echo $'\n'"All scripts ran OK"
+fi
