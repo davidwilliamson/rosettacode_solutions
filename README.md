@@ -7,7 +7,8 @@ Solutions to problems posed at [rosettacode.org](https://rosettacode.org)
 ## Tools
 
 - run static code checks: `make test-all`
-- run all soluitons: `./run-all.sh`
+- run all solutions: `./run-all.sh`
+- run solutions in a container: `make run-docker`
 
 ## Setup
 
