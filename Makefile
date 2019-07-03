@@ -61,7 +61,7 @@ pip-freeze:
 .PHONY: check-fmt
 check-fmt:
 	@echo "+ $@"
-	pycodestyle --filename='*.py' --exclude='*.sh,*.md,*.txt,Makefile,*.swp' --max-line-length=${PEP8_MAX_LINE_LENGTH} *
+	pycodestyle --filename='*.py' --exclude='*.sh,*.md,*.txt,Dockerfile,Makefile,*.swp' --max-line-length=${PEP8_MAX_LINE_LENGTH} *
 
 .PHONY: test-static
 test-static:
