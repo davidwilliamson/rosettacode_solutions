@@ -15,18 +15,11 @@ import math
 
 def main():
     """main"""
-    upper_limit = 50
+    upper_limit = 53
     candidate_primes = {num: True for num in range(2, upper_limit+1)}
-    for candidate in range(2, int(math.sqrt(upper_limit))):
+    for candidate in range(2, int(math.sqrt(upper_limit) + 1.0)):
         if candidate_primes[candidate]:
-            c_sqr = candidate*candidate
-            # n^2+0n, n^2+1n, n^2+2n ...
-            multiples = [
-                c_sqr + candidate*multiple for multiple
-                in range(0, int((upper_limit - c_sqr)/candidate)+1)
-            ]
-            # print("multiples of {0}: {1}".format(candidate, multiples))
-            for multiple in multiples:
+            for multiple in range(candidate*candidate, upper_limit+1, candidate):
                 candidate_primes[multiple] = False
     print("primes: up to {0}:\n{1}".format(
         upper_limit,
