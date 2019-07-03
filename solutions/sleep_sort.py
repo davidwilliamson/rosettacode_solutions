@@ -25,7 +25,7 @@ def generate_random_list():
     """Generate a list of integers on range 1..20 with no duplicates
     :return: list of integers
     """
-    rand_list = [num for num in range(1, 21)]
+    rand_list = list(range(1, 21))
     random.shuffle(rand_list)
     return rand_list
 
