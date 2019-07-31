@@ -30,26 +30,45 @@ level-order: 1 2 3 4 5 6 7 8 9
 
 
 class Node():
+    """A Node is a binary tree element
+    :param: content
+    :param: (ref to a Node object)
+    :param: (ref to a Node object)
+    """
+
     def __init__(self, content, left=None, right=None):
         self._content = content
         self._left = left
         self._right = right
+
     @property
     def left(self):
+        """getter for the left child Node"""
         return self._left
+
     @property
     def right(self):
+        """getter for the right child Node"""
         return self._right
+
     def __str__(self):
+        """implement the str()"""
         return str(self._content) + ' '
+
     def dump(self):
-        print("Node {0} {1} <-> {2}".format(str(self._content), str(self.left), str(self.right)))
+        """print this node's state"""
+        print("Node {0} {1} <-> {2}".format(
+            str(self._content), str(self.left), str(self.right)))
+
     def preorder(self):
+        """Traverse the tree in preorder"""
         if self is not None:
             print(str(self), end='')
             Node.preorder(self.left)
             Node.preorder(self.right)
+
     def postorder(self):
+        """Traverse the tree in postorder"""
         if self is not None:
             Node.postorder(self.left)
             Node.postorder(self.right)
@@ -83,12 +102,13 @@ def make_tree():
             3,
             left=Node(
                 6,
-                left=Node(8), 
+                left=Node(8),
                 right=Node(9)
             )
         )
     )
     return root
+
 
 def main():
     """main"""
