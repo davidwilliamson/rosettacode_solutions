@@ -32,10 +32,45 @@ the index also.
 """
 
 
+DEBUG = False
+
+def debug(msg):
+    if DEBUG:
+        print(msg)
+
+def binary_search(mylist, choice):
+    # TODO check this algorithm for correctness
+    midpoint = int(len(mylist) / 2)
+    previous = len(mylist)
+    done = False
+    tries = 0
+    while not done:
+        tries += 1
+        debug("{0} Midpoint: {1} Choice {2}".format(tries, midpoint, choice))
+        if mylist[midpoint] == choice:
+            print("{0} tries: {1} is mylist[{2}] == {3}".format(
+                tries, choice, midpoint, mylist[midpoint]))
+            done = True
+        else:
+            window = max(1, int(abs(previous - midpoint) / 2))
+            previous = midpoint
+            debug("window: {0} previous: {1} midpoint {2}".format(
+                window, previous, midpoint))
+            if mylist[midpoint] < choice:
+                midpoint = midpoint + window
+            elif mylist[midpoint] > choice:
+                midpoint = midpoint - window
+        if tries > 10:
+            raise Exception("Search for {0} failed".format(choice))
+
+
 def main():
     """main"""
-    raise NotImplementedError("binary search is WIP")
-
+    
+    mylist = list(range(1, 21, 2))
+    for choice in mylist:
+        print("\n{0}\nChoice is {1}".format('-' * 20, choice))
+        binary_search(mylist, choice)
 
 if __name__ == '__main__':
     main()
