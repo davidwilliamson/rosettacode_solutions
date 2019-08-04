@@ -34,11 +34,21 @@ the index also.
 
 DEBUG = False
 
+
 def debug(msg):
+    """Poor man's debug logging"""
     if DEBUG:
         print(msg)
 
+
 def binary_search(mylist, choice):
+    """do a binary search
+
+    :param: mylist (list) a sorted list of ints
+    :param: choice the int we are tryng to locate in mylist
+
+    :return: (int) the location in mylist where choice is found.
+    """
     # TODO check this algorithm for correctness
     midpoint = int(len(mylist) / 2)
     previous = len(mylist)
@@ -62,15 +72,16 @@ def binary_search(mylist, choice):
                 midpoint = midpoint - window
         if tries > 10:
             raise Exception("Search for {0} failed".format(choice))
+    return midpoint
 
 
 def main():
     """main"""
-    
     mylist = list(range(1, 21, 2))
     for choice in mylist:
         print("\n{0}\nChoice is {1}".format('-' * 20, choice))
         binary_search(mylist, choice)
+
 
 if __name__ == '__main__':
     main()
