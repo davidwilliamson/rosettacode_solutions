@@ -28,9 +28,10 @@ A text version example:
 1: ADEF - XXO-
 ^  ^^^^   ^^^^
 |   |      |
-|   |      result: two correct colors and spot,
-|   |              one correct color/wrong spot one color is not in the code.
-|   +----- the four colors(ADEF)
+|   |      result: two correct colors and spot   (XX)
+|   |              one correct color/wrong spot  (O)
+|   |              one color is not in the code. (-)
+|   +----- Guess: the four colors (ADEF)
 +--------- first guess
 
 -------------------------------------------
@@ -78,9 +79,107 @@ of possible patterns.
 """
 
 
+import random
+from collections import Counter
+
+
+# ['A', 'B', 'C' ... 'Z']
+ALL_PEGS = [chr(letter) for letter in range(ord('A'), ord('Z') + 1)]
+
+
+def generate_code(num_colors, code_length):
+    """Generate a new secret code.
+    :return: (str)
+    """
+    # limit to first num_colors. i.e., ['A', 'B', 'C']
+    peg_choices = ALL_PEGS[:num_colors]
+    # a string, e.g., "FEDD"
+    return "".join([random.choice(peg_choices) for _ in range(code_length)])
+
+
+def _count_correct_color_and_spot(code, guess):
+    results = Counter([code[i] == guess[i] for i in range(len(code))])
+    return results[True] if True in results else 0
+
+
+def _count_correct_color(code, guess):
+    code_bins = Counter(code)
+    guess_bins = Counter(guess)
+    correct_color_count = 0
+    for key in guess_bins:
+        if key in code_bins:
+            correct_color_count += min(code_bins[key], guess_bins[key])
+    return correct_color_count
+
+
+def score_guess(code, guess):
+    """Score the guess.
+
+    :return: (str) of 'X', 'O' and '-'
+    """
+    correct = _count_correct_color_and_spot(code, guess)
+    color_only = _count_correct_color(code, guess)
+    # color_only includes correct (color and location are right).
+    # since we want the additional items that have color correct but
+    # not the location, subtract off the correct count
+    partially_correct = color_only - correct
+    incorrect = len(code) - color_only
+    return 'X' * correct + 'O' * partially_correct + '-' * incorrect
+
+
+def is_winner(code, guess):
+    """Return True if the guess matches the code exactly"""
+    return score_guess(code, guess) == 'X' * len(code)
+
+
+def get_guess(num_colors, code_length):
+    """Prompt user for guess and validate their entry
+
+    :return: a validated guess
+    """
+    happy = False
+    peg_choices = ALL_PEGS[:num_colors]
+    while not happy:
+        print("\nChoose {0} chars from '{1}' (duplicates allowed)".format(
+            code_length, ', '.join(peg_choices)))
+        guess = input("Enter guess -> ")
+        guess = str(guess).upper()
+        if len(guess) != code_length:
+            print("{0} should be {1} chars".format(guess, code_length))
+            continue
+        happy = all([guess[i] in peg_choices for i in range(code_length)])
+    return guess
+
+
+def play_one_game(num_colors, code_length, max_guesses):
+    """Play one game.
+
+    :return: True if the player won
+    """
+    code = generate_code(num_colors, code_length)
+    # print(code)
+    guesses = 1
+    while guesses < max_guesses:
+        guess = get_guess(num_colors, code_length)
+        score = score_guess(code, guess)
+        if is_winner(code, guess):
+            print("{0} == {1} WINNER!!".format(code, guess))
+            return True
+        print("{0:2d}: {1} = {2}".format(guesses, guess, score))
+        guesses += 1
+    print("You lose. Code was {0}".format(code))
+    return False
+
+
 def main():
     """main"""
-    raise NotImplementedError("Mastermind is WIP")
+    # Number of different colored pegs
+    num_colors = 6
+    # How many pegs are in the code
+    code_length = 4
+    # how many incorrect guesses before player loses.
+    max_guesses = 10
+    play_one_game(num_colors, code_length, max_guesses)
 
 
 if __name__ == '__main__':
