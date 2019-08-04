@@ -79,6 +79,7 @@ of possible patterns.
 """
 
 
+import itertools
 import random
 from collections import Counter
 
@@ -87,14 +88,14 @@ from collections import Counter
 ALL_PEGS = [chr(letter) for letter in range(ord('A'), ord('Z') + 1)]
 
 
-def generate_code(num_colors, code_length):
+def generate_code(num_colors, num_pegs):
     """Generate a new secret code.
     :return: (str)
     """
     # limit to first num_colors. i.e., ['A', 'B', 'C']
     peg_choices = ALL_PEGS[:num_colors]
     # a string, e.g., "FEDD"
-    return "".join([random.choice(peg_choices) for _ in range(code_length)])
+    return "".join([random.choice(peg_choices) for _ in range(num_pegs)])
 
 
 def _count_correct_color_and_spot(code, guess):
@@ -132,7 +133,7 @@ def is_winner(code, guess):
     return score_guess(code, guess) == 'X' * len(code)
 
 
-def get_guess(num_colors, code_length):
+def get_guess(num_colors, num_pegs):
     """Prompt user for guess and validate their entry
 
     :return: a validated guess
@@ -141,26 +142,70 @@ def get_guess(num_colors, code_length):
     peg_choices = ALL_PEGS[:num_colors]
     while not happy:
         print("\nChoose {0} chars from '{1}' (duplicates allowed)".format(
-            code_length, ', '.join(peg_choices)))
+            num_pegs, ', '.join(peg_choices)))
         guess = input("Enter guess -> ")
         guess = str(guess).upper()
-        if len(guess) != code_length:
-            print("{0} should be {1} chars".format(guess, code_length))
+        if len(guess) != num_pegs:
+            print("{0} should be {1} chars".format(guess, num_pegs))
             continue
-        happy = all([guess[i] in peg_choices for i in range(code_length)])
+        happy = all([guess[i] in peg_choices for i in range(num_pegs)])
     return guess
 
 
-def play_one_game(num_colors, code_length, max_guesses):
+def build_all_solutions(num_colors, num_pegs):
+    """build list of all possible solutions
+
+    :return: list of str, where each item is a possible solution,
+             i.e., 'ABAA'
+    """
+    peg_choices = ALL_PEGS[:num_colors]
+    return [
+        "".join(soln) for soln in
+        itertools.product(peg_choices, repeat=num_pegs)
+    ]
+
+
+def play_computer_game(num_colors, num_pegs, max_guesses):
+    """Computer will play one game.
+
+    :return: True if the computer won
+    """
+    code = generate_code(num_colors, num_pegs)
+    guesses = 1
+    all_solutions = build_all_solutions(num_colors, num_pegs)
+    while guesses < max_guesses:
+        guess = random.choice(all_solutions)
+        score = score_guess(code, guess)
+        print("{0:2d}: {1} = {2} ({3})".format(
+            guesses, guess, score, len(all_solutions)))
+        if is_winner(code, guess):
+            print("{0} == {1} WINNER!!".format(code, guess))
+            return True
+        guesses += 1
+        # prune list of possible solutions that produce the same score.
+        # they can not be winning guess either.
+        all_solutions = [
+            soln for soln in all_solutions if
+            score_guess(code, soln) != score
+        ]
+        if code not in all_solutions:
+            print("Error: {0} not in {1}".format(
+                code, all_solutions))
+            return False
+    print("You lose. Code was {0}".format(code))
+    return False
+
+
+def play_one_game(num_colors, num_pegs, max_guesses):
     """Play one game.
 
     :return: True if the player won
     """
-    code = generate_code(num_colors, code_length)
+    code = generate_code(num_colors, num_pegs)
     # print(code)
     guesses = 1
     while guesses < max_guesses:
-        guess = get_guess(num_colors, code_length)
+        guess = get_guess(num_colors, num_pegs)
         score = score_guess(code, guess)
         if is_winner(code, guess):
             print("{0} == {1} WINNER!!".format(code, guess))
@@ -176,10 +221,11 @@ def main():
     # Number of different colored pegs
     num_colors = 6
     # How many pegs are in the code
-    code_length = 4
+    num_pegs = 4
     # how many incorrect guesses before player loses.
-    max_guesses = 10
-    play_one_game(num_colors, code_length, max_guesses)
+    max_guesses = 15
+    # play_one_game(num_colors, num_pegs, max_guesses)
+    play_computer_game(num_colors, num_pegs, max_guesses)
 
 
 if __name__ == '__main__':
