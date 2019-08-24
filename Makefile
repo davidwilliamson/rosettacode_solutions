@@ -77,8 +77,9 @@ test-all: check-fmt test-static
 .PHONY: clean-image
 clean-image:
 	@echo "+ $@"
-	@docker rmi ${IMAGE_NAME}:latest  || true
-	@docker rmi ${IMAGE_NAME}:${VERSION}  || true
+	@for img in `docker images ${IMAGE_NAME} --format '{{ .Repository}}:{{ .Tag }}'`; do \
+		echo docker rmi $$img; docker rmi $$img;\
+	done
 
 .PHONY: image
 image:
