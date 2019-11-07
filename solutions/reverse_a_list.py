@@ -38,8 +38,8 @@ def list_reverser(input_list):
 
 class ListReverserTest(unittest.TestCase):
     """Unit test cases for the list_reverser func"""
-    def test_001_positive_cases(self):
-        """ListReverserTest:test_positive_cases"""
+    def test_001_functionality(self):
+        """ListReverserTest:functionality"""
         test_cases = [
             {"input": [], "expected": []},
             {"input": [1], "expected": [1]},
@@ -56,8 +56,8 @@ class ListReverserTest(unittest.TestCase):
                 index, test_case['input'], result, test_case['expected'])
             self.assertEqual(result, test_case['expected'])
 
-    def test_002_negative_cases(self):
-        """ListReverserTest:test_negative_cases"""
+    def test_002_invalid_inputs(self):
+        """ListReverserTest:invalid_inputs"""
         test_cases = [
             3,
             -1,
