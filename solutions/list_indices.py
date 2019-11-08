@@ -15,9 +15,9 @@ def list_indices(input_list, indices):
     """determine the value of input_list at the specified indices
     example:
                          0    1    2    3
-    given input_list = ['w', 'x', 'y', 'z']
+    given input_list = ['a', 'b', 'c', 'd']
     and indices = [0, 3]
-    return [input_list[0], input_list[3]] = ['w', 'z']
+    return [input_list[0], input_list[3]] = ['a', 'd']
     """
     logging.debug("list %s indices %s", input_list, indices)
     # sanity check inputs:
@@ -40,7 +40,7 @@ class ListIndicesTest(unittest.TestCase):
     def test_001_functionality(self):
         test_cases = [
             # basic happy path
-            {"list": ['a', 'b', 'c', 4], "indices": [0, 3], "expected": ['a', 4]},
+            {"list": ['a', 'b', 'c', ], "indices": [0, 2], "expected": ['a', 'c']},
             # single index
             {"list": [1, 2, 3, 4], "indices": [1], "expected": [2]},
             # empty indices

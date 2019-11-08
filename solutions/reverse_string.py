@@ -28,16 +28,24 @@ def reverse_string(my_str):
     """Reverse a string
 
     Uses C-style indexing instead of reversed()
+    'hello world' -> 'dlrow olleh'
     :param: my_str(str)
 
     :return: (str) the input string with characters revered.
     """
+    # could simply use python slicing (works on strings as well as lists)
+    # return my_str[::-1]
+
     # print("input: {}".format(my_str))
-    reversed_str = list()
-    for index in range(0, len(my_str)):
-        # print("{0}/{1} : {2}".format(index, len(my_str)-1, my_str[index]))
-        reversed_str.append(my_str[len(my_str) - 1 - index])
-    return "".join(reversed_str)
+    reversed_str = ''
+    # range(start,stop,step). To iterate from last to first, we use:
+    # start = last element in my_str         -> len(my_str) - 1
+    # stop  = 'not to go past' first element -> -1
+    # step  = 'backwards'                    -> -1
+    # (note that strings are zero-indexed. The first char is at my_str[0])
+    for index in range(len(my_str)-1, -1, -1):
+        reversed_str += my_str[index]
+    return reversed_str
 
 
 def main():

@@ -26,11 +26,16 @@ def list_reverser(input_list):
     # could simply use python slicing
     # return input_list[::-1]
 
-    # range(first, last, increment)
-    # where 'last' means 'not to exceed'
-    # For an input_list with 3 elements (has indices 0, 1, 2), produces 2, 1, 0
-    reversed_list = [input_list[index]
-                     for index in range(len(input_list)-1, -1, -1)]
+    # range(start,stop,step). To iterate from last to first, we use:
+    # start = last element in input_list     -> len(input_list) - 1
+    # stop  = 'not to go past' first element -> -1
+    # step  = 'backwards'                    -> -1
+    # (note that lists are zero-indexed. The first item is at input_list[0])
+
+    # reversed_list = []
+    # for index in range(len(input_list)-1, -1, -1):
+    #     reversed_list.append(input_list[index])
+    reversed_list = [input_list[index] for index in range(len(input_list)-1, -1, -1)]
     if isinstance(input_list, str):
         return "".join(reversed_list)
     return reversed_list
@@ -44,10 +49,8 @@ class ListReverserTest(unittest.TestCase):
             {"input": [], "expected": []},
             {"input": [1], "expected": [1]},
             {"input": [1, 2, 3], "expected": [3, 2, 1]},
-            {"input": [1, 2, 3, 4], "expected": [4, 3, 2, 1]},
             {"input": [1, 2, 3, [4]], "expected": [[4], 3, 2, 1]},
             {"input": ["foo", 3, [1]], "expected": [[1], 3, "foo"]},
-            {"input": "hello world", "expected": "dlrow olleh"},
         ]
         for index, test_case in enumerate(test_cases):
             result = list_reverser(test_case['input'])
