@@ -8,7 +8,7 @@ skips='__init__.py'
 failed=''
 fail_count=0
 
-for f in $(find ./solutions -name *.py|sort); do
+for f in $(find ./solutions -name '*.py'|sort); do
     script=$(basename $f )
     skip_this_script=''
     for skip in $skips; do
