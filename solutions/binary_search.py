@@ -31,57 +31,79 @@ out whether or not the number was in the array afterwards. If it was, print
 the index also.
 """
 
-
-DEBUG = False
-
-
-def debug(msg):
-    """Poor man's debug logging"""
-    if DEBUG:
-        print(msg)
+import unittest
 
 
-def binary_search(mylist, choice):
-    """do a binary search
+def binary_search(input_list, search_item):
+    """Search for search_item in input_list. Assumes input_list is sorted
+    in ascending order, the list is homogonous, and the item is present.
 
-    :param: mylist (list) a sorted list of ints
-    :param: choice the int we are tryng to locate in mylist
+    Note: this is the same as
+    return input_list.index(search_item)
 
-    :return: (int) the location in mylist where choice is found.
+    :param: input_list a python list
+    :param: search_item an item in the list to locate
+    :return: the index (zero based) of the item
     """
-    # TODO check this algorithm for correctness
-    midpoint = int(len(mylist) / 2)
-    previous = len(mylist)
-    done = False
-    tries = 0
-    while not done:
-        tries += 1
-        debug("{0} Midpoint: {1} Choice {2}".format(tries, midpoint, choice))
-        if mylist[midpoint] == choice:
-            print("{0} tries: {1} is mylist[{2}] == {3}".format(
-                tries, choice, midpoint, mylist[midpoint]))
-            done = True
-        else:
-            window = max(1, int(abs(previous - midpoint) / 2))
-            previous = midpoint
-            debug("window: {0} previous: {1} midpoint {2}".format(
-                window, previous, midpoint))
-            if mylist[midpoint] < choice:
-                midpoint = midpoint + window
-            elif mylist[midpoint] > choice:
-                midpoint = midpoint - window
-        if tries > 10:
-            raise Exception("Search for {0} failed".format(choice))
+    if search_item not in input_list:
+        raise ValueError(f"{search_item} not in {input_list}")
+    print("given: {0} find {1}".format(input_list, search_item))
+    #  0  1  2  3  4
+    # [3, 4, 5, 6, 7] 
+    #        ^
+    #        |-- midpoint = 2
+    midpoint = int(len(input_list)/2)
+    print("midpoint is {0} value is {1}".format(midpoint, input_list[midpoint]))
+    if search_item < input_list[midpoint]:
+        return binary_search(input_list[0:midpoint], search_item)
+    if search_item > input_list[midpoint]:
+        # Since we are shrinking the list, must add value of midpoint so we
+        # will return the index of the original list, not the shrunken list.
+        return (binary_search(input_list[midpoint:len(input_list)], search_item) +
+                midpoint)
     return midpoint
 
 
-def main():
-    """main"""
-    mylist = list(range(1, 21, 2))
-    for choice in mylist:
-        print("\n{0}\nChoice is {1}".format('-' * 20, choice))
-        binary_search(mylist, choice)
+class BinarySearchTest(unittest.TestCase):
+    """BinarySearchTest"""
+    def test_001_binary_search(self):
+        """BinarySearchTest:test_001_binary_search"""
+        test_cases = [
+            {"input": [1, 2, 3, 4, 5, 6, 7], "search_item": 1, "expected": 0},
+            {"input": [1, 2, 3, 4, 5, 6, 7], "search_item": 2, "expected": 1},
+            {"input": [1, 2, 3, 4, 5, 6, 7], "search_item": 3, "expected": 2},
+            {"input": [1, 2, 3, 4, 5, 6, 7], "search_item": 4, "expected": 3},
+            {"input": [1, 2, 3, 4, 5, 6, 7], "search_item": 5, "expected": 4},
+            {"input": [1, 2, 3, 4, 5, 6, 7], "search_item": 6, "expected": 5},
+            {"input": [1, 2, 3, 4, 5, 6, 7], "search_item": 7, "expected": 6},
+            # Sparse list
+            {"input": [1, 3, 5, 7, 9, 10, 11], "search_item": 5, "expected": 2},
+            {"input": [1, 3, 5, 7, 9, 10, 11], "search_item": 9, "expected": 4},
+            # List with even number of items
+            {"input": [1, 2, 3, 4], "search_item": 2, "expected": 1},
+            # List with exactly one item
+            {"input": [1], "search_item": 1, "expected": 0},
+        ]
+
+        for test_case in test_cases:
+            print("\nTest: binary_search({0}, {1})".format(
+                test_case['input'], test_case['search_item']))
+            result = binary_search(test_case['input'], test_case['search_item'])
+            self.assertEqual(result, test_case['expected'])
+
+    def test_002_binary_search_errors(self):
+        """BinarySearchTest:test_002_binary_search_errors"""
+        test_cases = [
+            {"input": [1, 2, 3, 4, 5, 6, 7], "search_item": -1, "expected": 0},
+        ]
+
+        for test_case in test_cases:
+            print("\nTest: binary_search({0}, {1})".format(
+                test_case['input'], test_case['search_item']))
+            with self.assertRaises(ValueError) as ctx:
+                binary_search(test_case['input'], test_case['search_item'])
+            print("got exception {0}".format(str(ctx.exception)))
 
 
 if __name__ == '__main__':
-    main()
+    unittest.main()
