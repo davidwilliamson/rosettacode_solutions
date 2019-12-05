@@ -33,6 +33,39 @@ Task
 
 Simulate at least a thousand games using three doors for each strategy and show the
 results in such a way as to make it easy to compare the effects of each strategy.
+
+-----------------
+Analysis (from Wikipedia)
+https://en.wikipedia.org/wiki/Monty_Hall_problem
+
+The contestant should switch to the other door.
+- Contestants who switch have a 2/3 chance of winning the car,
+- Contestants who stick to their initial choice have only a 1/3 chance.
+
+
+The solution presented by vos Savant (1990b) in Parade shows the three possible
+arrangements of one car and two goats behind three doors and the result of
+staying or switching after initially picking door 1 in each case:
+
+      Car is actually
+ ---- behind Door --------|-------------------- Result -----------------------------
+ 1         2         3    |  staying at door #1       switching to the door offered
+ -------|---------|-------|-----------------------|---------------------------------
+ Goat   |  Goat   |  Car  |  Wins goat            |   Wins car
+ Goat   |  Car    |  Goat |  Wins goat            |   Wins car
+ Car    |  Goat   |  Goat |  Wins car             |   Wins goat
+
+A player who stays with the initial choice wins in only one out of three of
+these equally likely possibilities, while a player who switches wins in two out
+of three.
+
+An intuitive explanation is that, if the contestant initially picks a goat
+(2 of 3 doors), the contestant will win the car by switching because the other
+goat can no longer be picked, whereas if the contestant initially picks the car
+(1 of 3 doors), the contestant will not win the car by switching. The fact that
+the host subsequently reveals a goat in one of the unchosen doors changes nothing
+about the initial probability.
+
 """
 
 import logging
