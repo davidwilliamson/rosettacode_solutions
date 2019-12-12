@@ -37,7 +37,9 @@ def list_indices(input_list, indices):
 
 
 class ListIndicesTest(unittest.TestCase):
+    """ListIndicesTest"""
     def test_001_functionality(self):
+        """ListIndicesTest:test_001_functionality"""
         test_cases = [
             # basic happy path
             {"list": ['a', 'b', 'c', ], "indices": [0, 2], "expected": ['a', 'c']},
@@ -58,6 +60,7 @@ class ListIndicesTest(unittest.TestCase):
             self.assertEqual(result, test_case['expected'])
 
     def test_002_invalid_inputs(self):
+        """ListIndicesTest:test_002_invalid_inputs"""
         test_cases = [
             # input list is not a list
             {"list": 'x', "indices": [0], "type": TypeError},

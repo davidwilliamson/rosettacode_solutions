@@ -47,6 +47,17 @@ def get_wordlist(file_name):
         for word in handle:
             yield word.strip()
 
+# Strategy
+# Build a struct like this:
+# anagrams = {
+#  'foo': ['foo', 'oof'],
+#  'abr': ['bar', 'arb'],
+#  ...
+# }
+# If we sort the chars of each word as we encounter it, and use that sorted
+# string as a dict key, we ensure that it gets added to the correct anagram bucket.
+#
+
 
 def main():
     """main"""

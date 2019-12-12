@@ -39,6 +39,7 @@ until hasChanged = false
 import random
 
 
+# Some data types to sort
 def random_chars():
     """Return a list of chars 'A' through 'Z' in random order.
     ['C', 'F', ...]
@@ -119,12 +120,15 @@ def bubble_sort(data):
     """
     has_changed = True
     item_count = len(data) - 1
+    if item_count <= 0:
+        return
+    # Keep going until no more swaps
     while has_changed is True:
         has_changed = False
-        if item_count <= 0:
-            return
+        # loop thru a[0], a[1], ... a[n-1]
         for index in range(0, item_count):
             if data[index] > data[index+1]:
+                # swap lelements
                 temp = data[index]
                 data[index] = data[index+1]
                 data[index+1] = temp

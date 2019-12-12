@@ -49,7 +49,7 @@ def binary_search(input_list, search_item):
         raise ValueError(f"{search_item} not in {input_list}")
     print("given: {0} find {1}".format(input_list, search_item))
     #  0  1  2  3  4
-    # [3, 4, 5, 6, 7] 
+    # [3, 4, 5, 6, 7]
     #        ^
     #        |-- midpoint = 2
     midpoint = int(len(input_list)/2)
