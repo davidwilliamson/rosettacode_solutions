@@ -20,6 +20,10 @@ CUR_DIR = $(shell echo "${PWD}")
 
 # For python format checker. Default is 78
 PEP8_MAX_LINE_LENGTH = 85
+CODE_STYLE_EXCLUDE = '*.sh,*.md,*.txt,Dockerfile,Makefile,LICENSE,*.swp'
+#
+SOLUTIONS_DIR = solutions
+RUN_SCRIPT = ./run-all.sh
 
 ##########################
 # Help screen. invoked by any of: 'make', 'make default', 'make help'
@@ -28,8 +32,11 @@ PEP8_MAX_LINE_LENGTH = 85
 default:
 	@echo "Please specify a target. The choices are:"
 	@echo ""
+	@echo "---------------------------------- Run Solutions -----------------------------------"
+	@echo "run         : Run all solutions. Halt if any solution fails"
+	@echo ""
 	@echo "----------------------------------- Development ------------------------------------"
-	@echo "pip-freeze : run pip freeze and update requirements.txt"
+	@echo "pip-freeze  : Run pip freeze and update requirements.txt"
 	@echo ""
 	@echo "---------------------------------- Unit Testing ------------------------------------"
 	@echo "test-all    : Run all static analysis tests"
@@ -56,17 +63,24 @@ pip-freeze:
 	@pip freeze  > requirements.txt
 
 #################################
+# run targets
+.PHONY: run
+run:
+	@echo "+ $@"
+	${RUN_SCRIPT}
+
+#################################
 # test targets
 #################################
 .PHONY: check-fmt
 check-fmt:
 	@echo "+ $@"
-	pycodestyle --filename='*.py' --exclude='*.sh,*.md,*.txt,Dockerfile,Makefile,*.swp' --max-line-length=${PEP8_MAX_LINE_LENGTH} *
+	cd ${SOLUTIONS_DIR}; pycodestyle --filename='*.py' --exclude=${CODE_STYLE_EXCLUDE} --max-line-length=${PEP8_MAX_LINE_LENGTH} *
 
 .PHONY: test-static
 test-static:
 	@echo "+ $@"
-	pylint solutions
+	pylint ${SOLUTIONS_DIR}
 
 .PHONY: test-all
 test-all: check-fmt test-static
