@@ -63,16 +63,15 @@ def main():
     # given to sleep on) from each thread as it completes.
     num_workers = len(random_ints)
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
-        # dict of {executor: delay, ...}
-        runner_map = {executor.submit(do_sleep, val): val for val in random_ints}
+        # list of  executor objects [executor, executor, executor ...]
+        tasks = [executor.submit(do_sleep, val) for val in random_ints]
         # Since every delay is different, the threads will complete at different
         # times. We collect each thread in the order they complete, and end up
         # with a sorted list.
-        for future in concurrent.futures.as_completed(runner_map):
-            # We could just capture the value of this dict element (which is the
-            # delay for this completed thread) but let's use the returned result
-            # from the thread, (which is also the value of the delay)
-            # sorted_ints.append(runner[future])
+        for future in concurrent.futures.as_completed(tasks):
+            # future.result() is the output for do_sleep(), which returns the
+            # input it was given. So collecting that in the order the tasks complete
+            # results in a sorted list.
             sorted_ints.append(future.result())
     print("sorted: {}".format(list_to_str(sorted_ints)))
 
