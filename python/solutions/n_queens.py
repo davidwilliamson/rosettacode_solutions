@@ -2,6 +2,8 @@
 
 """N-Queens problem
 
+https://rosettacode.org/wiki/N-queens_problem
+
 https://en.wikipedia.org/wiki/Eight_queens_puzzle
 
 The eight queens puzzle has 92 distinct solutions. If solutions that differ
