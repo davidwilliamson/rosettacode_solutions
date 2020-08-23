@@ -1,8 +1,6 @@
-# rosettacode_solutions
+# Python 
 
-Solutions to problems posed at [rosettacode.org](https://rosettacode.org)
-
-[https://rosettacode.org/wiki/Category:Programming_Tasks](https://rosettacode.org/wiki/Category:Programming_Tasks)
+Selected solutions to [https://rosettacode.org/wiki/Category:Programming_Tasks](https://rosettacode.org/wiki/Category:Programming_Tasks)
 
 ## Tools
 
@@ -25,6 +23,36 @@ MY_VIRTUAL_ENV=$(cat .python-version)
 pyenv virtualenv $VERSION $MY_VIRTUAL_ENV
 pip install -r requirements.txt
 ```
+
+## Run
+
+### From the shell
+
+`./run-all.sh`
+
+
+
+or use make (requires make installed. For MacOS, this means executing
+`make --version || xcode-select --install` )
+
+`make run`
+
+### Docker
+
+Build image and run inside a container
+
+`make run-docker`
+
+Just build the image
+
+`make image`
+
+### Run static code analysis
+
+Run pylint and pep8
+
+`make test-all`
+
 
 ## Create python dev environment
 
